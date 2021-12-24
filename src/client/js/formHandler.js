@@ -1,7 +1,7 @@
 function handleSubmit(event) {
   event.preventDefault();
 
-  // check what text was put into the form field
+  // check if the URL given in the form is valid
   let formURL = document.getElementById("url").value;
   if (Client.checkForURL(formURL)) {
     console.log("::: Form Submitted :::");
@@ -12,7 +12,7 @@ function handleSubmit(event) {
         formdata.append("key", res.key);
         formdata.append("url", formURL);
         formdata.append("sentences", "5");
-
+        console.log(JSON.stringify(formdata))
         const requestOptions = {
           method: "POST",
           body: formdata,
@@ -26,6 +26,7 @@ function handleSubmit(event) {
           .then((response) => response.json())
           .then((data) => {
             document.getElementById("results").innerHTML = data.summary;
+            return data.summary
           })
           .catch((error) => console.log("error", error));
       });
