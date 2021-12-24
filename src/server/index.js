@@ -1,8 +1,7 @@
-var path = require('path')
+const path = require('path')
+require('dotenv').config()
 const express = require('express')
 const mockAPIResponse = require('./mockAPI.js')
-
-const API_KEY = 'acc3a9854d3d44bac9227fd30b4b283f'
 
 const app = express()
 
@@ -24,3 +23,6 @@ app.get('/test', function (req, res) {
     res.send(mockAPIResponse)
 })
 
+app.get('/getkey', function (req, res) {
+    res.send({key: process.env.API_KEY})
+})
