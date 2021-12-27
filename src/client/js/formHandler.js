@@ -5,34 +5,32 @@ function handleSubmit(event) {
   let formURL = document.getElementById("url").value;
   if (Client.checkForURL(formURL)) {
     console.log("::: Form Submitted :::");
-    fetch("http://localhost:3000/getkey")
-      .then((res) => res.json())
-      .then(function (res) {
-        const formdata = new FormData();
-        formdata.append("key", res.key);
-        formdata.append("url", formURL);
-        formdata.append("sentences", "5");
-        console.log(JSON.stringify(formdata))
-        const requestOptions = {
-          method: "POST",
-          body: formdata,
-          redirect: "follow",
-        };
 
-        const response = fetch(
-          "https://api.meaningcloud.com/summarization-1.0",
-          requestOptions
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            document.getElementById("results").innerHTML = data.summary;
-            return data.summary
-          })
-          .catch((error) => console.log("error", error));
-      });
+    postData("http://localhost:3003/getsummary", { url: formURL }).then(
+      (data) => {
+        document.getElementById("results").innerHTML = data.summary;
+      }
+    );
   } else {
     document.getElementById("results").innerHTML = "Please enter a valid URL!";
   }
+}
+
+async function postData(url = "", data = {}) {
+  const response = await fetch(url, {
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    mode: "cors", // no-cors, *cors, same-origin
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: "same-origin", // include, *same-origin, omit
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: "follow", // manual, *follow, error
+    referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    body: JSON.stringify(data), // body data type must match "Content-Type" header
+  });
+  return response.json(); // parses JSON response into native JavaScript objects
 }
 
 export { handleSubmit };
