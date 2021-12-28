@@ -24,8 +24,8 @@ app.get("/", function (req, res) {
 });
 
 // designates what port the app will listen to for incoming requests
-app.listen(3003, function () {
-  console.log("News Evaluate app listening on port 3003!");
+app.listen(process.env.PORT, function () {
+  console.log(`News Evaluate app listening on port ${process.env.PORT}!`);
 });
 
 app.post("/getsummary", function (request, response) {
